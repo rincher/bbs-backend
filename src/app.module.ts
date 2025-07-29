@@ -13,15 +13,16 @@ import { SecretsService } from './secrets/secrets.service';
       imports: [SecretsModule],
       inject: [SecretsService],
       useFactory: async (secretsService: SecretsService) => {
-        const dbPassword = await secretsService.getSecret(
+        const secretString = await secretsService.getSecret(
           'rds!db-33d0058b-facd-4121-a761-060e0022df25',
         ); // Replace with your Secrets Manager secret name
+        const dbSecret = JSON.parse(secretString);
         return {
           type: 'mysql',
           host: 'bbs-db.c2b2wgk08yd3.us-east-1.rds.amazonaws.com',
           port: 3306,
-          username: 'admin', // Replace with your database username
-          password: dbPassword,
+          username: dbSecret.username,
+          password: dbSecret.password,
           database: 'testdb', // Replace with your database name
           entities: [Post],
           synchronize: true, // Set to false in production
