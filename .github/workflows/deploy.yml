@@ -1,6 +1,6 @@
-# GitHub Actions workflow for building a React TypeScript app, pushing to ECR via AWS OIDC, and deploying to ECS
+# GitHub Actions workflow for building a NestJs TypeScript app, pushing to ECR via AWS OIDC, and deploying to ECS
 
-name: Deploy React App to AWS ECS
+name: Deploy NestJs App to AWS ECS
 
 on:
   push:
