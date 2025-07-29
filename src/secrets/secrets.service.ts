@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand,
+} from '@aws-sdk/client-secrets-manager';
 
 @Injectable()
 export class SecretsService {
@@ -7,7 +10,7 @@ export class SecretsService {
 
   constructor() {
     this.client = new SecretsManagerClient({
-      region: 'us-east-1', // Replace with your AWS region
+      region: 'us-east-1',
     });
   }
 
@@ -18,12 +21,13 @@ export class SecretsService {
       });
       const response = await this.client.send(command);
 
-      if ('SecretString' in response) {
+      if (response.SecretString) {
         return response.SecretString;
+      } else if (response.SecretBinary) {
+        const buff = Buffer.from(response.SecretBinary);
+        return buff.toString('utf-8'); // 혹은 'ascii', 필요에 따라 선택
       } else {
-        // Handle binary secrets if needed
-        const buff = Buffer.from(response.SecretBinary as string, 'base64');
-        return buff.toString('ascii');
+        throw new Error('SecretString and SecretBinary are both undefined');
       }
     } catch (error) {
       console.error('Error retrieving secret:', error);
