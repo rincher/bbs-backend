@@ -6,6 +6,7 @@ import { PostsModule } from './posts/posts.module';
 import { Post } from './posts/post.entity';
 import { SecretsModule } from './secrets/secrets.module';
 import { SecretsService } from './secrets/secrets.service';
+import { ReusableModule } from './reusable/reusable.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { SecretsService } from './secrets/secrets.service';
       },
     }),
     PostsModule,
+    ReusableModule,
   ],
   controllers: [AppController],
   providers: [AppService],
